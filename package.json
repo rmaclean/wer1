@@ -34,6 +34,7 @@
     "graphql-scalars": "^1.23.0",
     "pouchdb": "^8.0.1",
     "reflect-metadata": "^0.2.2",
-    "type-graphql": "^2.0.0-rc.1"
+    "type-graphql": "^2.0.0-rc.1",
+    "typedi": "^0.10.0"
   }
 }

@@ -4,11 +4,13 @@ import {startStandaloneServer} from '@apollo/server/standalone';
 import {buildSchema} from 'type-graphql';
 import {TrackResolver} from './graphql/track.resolver.js';
 import PouchDB from 'pouchdb';
+import {Container} from 'typedi';
 
-const db = new PouchDB('wer1');
+Container.set('db', new PouchDB('wer1'));
 
 const schema = await buildSchema({
   resolvers: [TrackResolver],
+  container: Container,
 });
 
 const server = new ApolloServer({schema});
