@@ -5,7 +5,14 @@ export class TrackService {
   @Inject('db')
   private db!: PouchDB.Database<{}>;
 
-  findAll(args: { skip: number; take: number; }) {
-    throw new Error('Method not implemented.');
-  }
+  findAll = async (args: {skip: number; take: number}) => {
+    const {rows} = await this.db.allDocs({
+      include_docs: true,
+      skip: args.skip,
+      limit: args.take,
+    });
+
+    console.dir(rows);
+    return rows;
+  };
 }

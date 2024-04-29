@@ -10,7 +10,7 @@ export class TrackResolver {
   constructor(private trackService: TrackService) {}
 
   @Query(returns => [Track])
-  tracks(@Args() {skip, take}: TracksArgs) {
+  findAll(@Args() {skip, take}: TracksArgs) {
     return this.trackService.findAll({skip, take});
   }
 }
