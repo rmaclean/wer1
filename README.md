@@ -15,3 +15,5 @@ Welcome to the demo application for WeR1, this is meant to give you a brief idea
 - The document provided said it could be dockerised, and I have not done that because it was optional and also because adding a _DOCKERFILE_ is not massively complex and the time to benefit trade-off for me, lands that I would rather produce a better full solution for you to understand my skills.
 
 - DB for this is PouchDB which is a local DB which can work with CouchDB. I just wanted a pure local filesystem solution. Obviously a real system would have something far better for production.
+
+- The DB layer creates the index each time just to make it easier to run. In a prod system, I would pull that out into scripts that run on creation and save spin up cycles.

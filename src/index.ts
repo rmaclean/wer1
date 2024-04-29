@@ -3,10 +3,10 @@ import {ApolloServer} from '@apollo/server';
 import {startStandaloneServer} from '@apollo/server/standalone';
 import {buildSchema} from 'type-graphql';
 import {TrackResolver} from './graphql/track.resolver.js';
-import PouchDB from 'pouchdb';
 import {Container} from 'typedi';
+import {TrackService} from './graphql/track.service.js';
 
-Container.set('db', new PouchDB('wer1'));
+Container.set(TrackService, await TrackService.createTrackService());
 
 const schema = await buildSchema({
   resolvers: [TrackResolver],

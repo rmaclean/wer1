@@ -2,7 +2,7 @@ import {ArgsType, Field, Int} from 'type-graphql';
 import {Min, Max} from 'class-validator';
 
 @ArgsType()
-export class TracksArgs {
+export class FindAllArgs {
   @Field(type => Int)
   @Min(0)
   skip = 0;
@@ -11,4 +11,13 @@ export class TracksArgs {
   @Min(1)
   @Max(50)
   take = 25;
+}
+
+@ArgsType()
+export class FindOneArgs {
+  @Field()
+  name!: string;
+
+  @Field()
+  artist_name!: string;
 }
