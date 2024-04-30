@@ -12,6 +12,20 @@ export class TrackService {
     this.db = db;
   }
 
+  get = async (id: string) => {
+    const {docs} = await this.db.find({
+      selector: {
+        id: id,
+      },
+    });
+
+    if (docs.length === 1) {
+      return docs[0];
+    }
+
+    return undefined;
+  };
+
   static createTrackService = async () => {
     PouchDb.plugin(find);
     const db = new PouchDb('wer1');

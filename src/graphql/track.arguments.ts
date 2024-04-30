@@ -21,3 +21,9 @@ export class FindOneArgs {
   @Field()
   artist_name!: string;
 }
+
+@ArgsType()
+export class GetOneArgs {
+  @Field()
+  id!: string;
+}

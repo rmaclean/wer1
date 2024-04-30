@@ -1,6 +1,6 @@
 import {Args, Mutation, Query, Resolver} from 'type-graphql';
 import {Track} from './types.js';
-import {FindAllArgs, FindOneArgs} from './track.arguments.js';
+import {FindAllArgs, FindOneArgs, GetOneArgs} from './track.arguments.js';
 import {TrackService} from './track.service.js';
 import {Service} from 'typedi';
 
@@ -12,6 +12,11 @@ export class TrackResolver {
   @Query(returns => [Track])
   findAll(@Args() {skip, take}: FindAllArgs) {
     return this.trackService.findAll({skip, take});
+  }
+
+  @Query(returns => Track, {nullable: true})
+  getOne(@Args() {id}: GetOneArgs) {
+    return this.trackService.get(id);
   }
 
   @Mutation(returns => Track, {nullable: true})
