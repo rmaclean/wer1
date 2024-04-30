@@ -14,7 +14,7 @@ export class TrackResolver {
     return this.trackService.findAll({skip, take});
   }
 
-  @Query(returns => Track)
+  @Query(returns => Track, {nullable: true})
   findOne(@Args() {name, artist_name}: FindOneArgs) {
     return this.trackService.findOne({name, artist_name});
   }

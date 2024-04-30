@@ -2,6 +2,7 @@ import {Service} from 'typedi';
 import PouchDb from 'pouchdb';
 import find from 'pouchdb-find';
 import {FindAllArgs, FindOneArgs} from './track.arguments.js';
+import {getTrack} from '../services/acrmetadata.js';
 
 @Service()
 export class TrackService {
@@ -33,7 +34,7 @@ export class TrackService {
       limit: args.take,
     });
 
-    return rows;
+    return rows.map(row => row.doc).filter(doc => !(doc as any)['language']);
   };
 
   findOne = async (args: FindOneArgs) => {
@@ -45,9 +46,19 @@ export class TrackService {
     });
 
     if (docs.length === 0) {
-      return null;
+      const track = await getTrack(args.name, args.artist_name);
+      if (
+        track &&
+        track.artist_name.toLowerCase() === args.artist_name.toLowerCase() &&
+        track.name.toLowerCase() === args.name.toLowerCase()
+      ) {
+        await this.db.post(track);
+        return track;
+      }
+    } else {
+      return docs[0];
     }
 
-    return docs[0];
+    return undefined;
   };
 }

@@ -1,0 +1,12 @@
+query FindAllWithParams($take: Int!, $skip: Int!) {
+  findAll(take: $take, skip: $skip) {
+    id
+    IRSC
+    artist_name
+    created_at
+    duration
+    name
+    updated_at
+    release_date
+  }
+}
