@@ -4,8 +4,6 @@ Welcome to the demo application for WeR1, this is meant to give you a brief idea
 
 ## Running
 
-### Requirements
-
 1. Node 20+
 2. Run `npm ci` to install dependencies
 3. Set the following environmental variables
@@ -24,3 +22,7 @@ The _graphql-queries_ folder has examples of the queries which can be run.
 - DB for this is PouchDB which is a local DB which can work with CouchDB. I just wanted a pure local filesystem solution. Obviously a real system would have something far better for production.
 
 - The DB layer creates the index each time just to make it easier to run. In a prod system, I would pull that out into scripts that run on creation and save spin up cycles.
+
+- In the requirements, point 5 is "Include proper error handling and response status codes for GraphQL endpoints" and most of this is handled by the Apollo engine anyway, but there are cases where there is a design decision to be made. For example with updating/deleting, what should happen when an invalid ID is provided. One approach could be to return a 404 which is what I would do in a RESTFul system; but in this I chose to always return successfully and return nothing if it does not exist. This is for me, closer to the way I believe GraphQL should work; but this is a design approach and one to be discussed by a team.
+
+- What about exceptions and how should they be handled? At this point they are intentionally left as is, so that it is clear on the cause. This could be potentially exposing internal data (a known OWASP top 10), but without context on how this will be used, it is not clear the severity. If this is internal, then the severity is minimal and the benefit greater. If this is public facing, then the risk increases and they should be handled.

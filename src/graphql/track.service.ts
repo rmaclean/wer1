@@ -28,7 +28,6 @@ export class TrackService {
     const existingTrack = docs[0] as PouchDB.Core.ExistingDocument<Track>;
     this.nukeUndefinedProperties(track);
     Object.assign(existingTrack, track);
-    console.dir(existingTrack);
     existingTrack.updated_at = new Date();
     await this.db.put(existingTrack);
     return existingTrack;

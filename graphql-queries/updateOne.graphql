@@ -1,0 +1,12 @@
+mutation UpdateOne($id: ID!, $artistName: String) {
+  updateOne(id: $id, artist_name: $artistName) {
+    IRSC
+    artist_name
+    created_at
+    duration
+    id
+    name
+    release_date
+    updated_at
+  }
+}
