@@ -1,4 +1,4 @@
-import {ArgsType, Field, Int} from 'type-graphql';
+import {ArgsType, Field, ID, Int} from 'type-graphql';
 import {Min, Max} from 'class-validator';
 
 @ArgsType()
@@ -26,4 +26,25 @@ export class FindOneArgs {
 export class GetOneArgs {
   @Field()
   id!: string;
+}
+
+@ArgsType()
+export class UpdateTrack {
+  @Field(type => ID, {name: 'id'})
+  readonly _id!: string;
+
+  @Field({nullable: true})
+  name?: string;
+
+  @Field({nullable: true})
+  artist_name?: string;
+
+  @Field(type => Int, {nullable: true})
+  duration?: number;
+
+  @Field({nullable: true})
+  IRSC?: string;
+
+  @Field({nullable: true})
+  release_date?: Date;
 }

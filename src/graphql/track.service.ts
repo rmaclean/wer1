@@ -1,9 +1,9 @@
 import {Service} from 'typedi';
 import PouchDb from 'pouchdb';
 import find from 'pouchdb-find';
-import {FindAllArgs, FindOneArgs} from './track.arguments.js';
+import {FindAllArgs, FindOneArgs, UpdateTrack} from './track.arguments.js';
 import {getTrack} from '../services/acrmetadata.js';
-import {DeletedTrack} from './types.js';
+import {DeletedTrack, Track} from './track.types.js';
 
 @Service()
 export class TrackService {
@@ -12,6 +12,27 @@ export class TrackService {
   private constructor(db: PouchDB.Database<{}>) {
     this.db = db;
   }
+
+  private nukeUndefinedProperties = (object: any) => {
+    Object.keys(object).forEach(
+      key => object[key] === undefined && delete object[key]
+    );
+  };
+
+  update = async (track: UpdateTrack) => {
+    const docs = await this.getById(track._id);
+    if (docs.length === 0) {
+      return undefined;
+    }
+
+    const existingTrack = docs[0] as PouchDB.Core.ExistingDocument<Track>;
+    this.nukeUndefinedProperties(track);
+    Object.assign(existingTrack, track);
+    console.dir(existingTrack);
+    existingTrack.updated_at = new Date();
+    await this.db.put(existingTrack);
+    return existingTrack;
+  };
 
   delete = async (id: string) => {
     const docs = await this.getById(id);

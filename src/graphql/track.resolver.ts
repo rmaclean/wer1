@@ -1,6 +1,11 @@
 import {Args, Mutation, Query, Resolver} from 'type-graphql';
-import {DeletedTrack, Track} from './types.js';
-import {FindAllArgs, FindOneArgs, GetOneArgs} from './track.arguments.js';
+import {DeletedTrack, Track} from './track.types.js';
+import {
+  FindAllArgs,
+  FindOneArgs,
+  GetOneArgs,
+  UpdateTrack,
+} from './track.arguments.js';
 import {TrackService} from './track.service.js';
 import {Service} from 'typedi';
 
@@ -17,6 +22,11 @@ export class TrackResolver {
   @Query(returns => Track, {nullable: true})
   getOne(@Args() {id}: GetOneArgs) {
     return this.trackService.get(id);
+  }
+
+  @Mutation(returns => Track, {nullable: true})
+  updateOne(@Args() track: UpdateTrack) {
+    return this.trackService.update(track);
   }
 
   @Mutation(returns => DeletedTrack, {nullable: true})
