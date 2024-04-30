@@ -1,4 +1,4 @@
-import {Args, Query, Resolver} from 'type-graphql';
+import {Args, Mutation, Query, Resolver} from 'type-graphql';
 import {Track} from './types.js';
 import {FindAllArgs, FindOneArgs} from './track.arguments.js';
 import {TrackService} from './track.service.js';
@@ -14,7 +14,7 @@ export class TrackResolver {
     return this.trackService.findAll({skip, take});
   }
 
-  @Query(returns => Track, {nullable: true})
+  @Mutation(returns => Track, {nullable: true})
   findOne(@Args() {name, artist_name}: FindOneArgs) {
     return this.trackService.findOne({name, artist_name});
   }
