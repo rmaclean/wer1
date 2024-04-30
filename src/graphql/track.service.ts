@@ -3,6 +3,7 @@ import PouchDb from 'pouchdb';
 import find from 'pouchdb-find';
 import {FindAllArgs, FindOneArgs} from './track.arguments.js';
 import {getTrack} from '../services/acrmetadata.js';
+import {DeletedTrack} from './types.js';
 
 @Service()
 export class TrackService {
@@ -12,12 +13,28 @@ export class TrackService {
     this.db = db;
   }
 
-  get = async (id: string) => {
+  delete = async (id: string) => {
+    const docs = await this.getById(id);
+    if (docs.length === 1) {
+      await this.db.remove(docs[0]);
+      return new DeletedTrack(id);
+    }
+
+    return undefined;
+  };
+
+  private getById = async (id: string) => {
     const {docs} = await this.db.find({
       selector: {
-        id: id,
+        _id: id,
       },
     });
+
+    return docs;
+  };
+
+  get = async (id: string) => {
+    const docs = await this.getById(id);
 
     if (docs.length === 1) {
       return docs[0];

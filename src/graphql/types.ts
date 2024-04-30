@@ -3,15 +3,16 @@ import {v4 as uuidv4} from 'uuid';
 
 @InterfaceType()
 abstract class Base {
-  @Field(type => ID)
-  id!: string;
+  @Field(type => ID, {name: 'id'})
+  readonly _id!: string;
+
   @Field()
-  created_at!: Date;
+  readonly created_at!: Date;
+
   @Field()
   updated_at!: Date;
 
   constructor() {
-    this.id = uuidv4();
     this.created_at = new Date();
     this.updated_at = new Date();
   }
@@ -33,4 +34,14 @@ export class Track extends Base {
 
   @Field()
   release_date!: Date;
+}
+
+@ObjectType()
+export class DeletedTrack {
+  @Field(type => ID)
+  id!: string;
+
+  constructor(id: string) {
+    this.id = id;
+  }
 }
