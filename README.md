@@ -9,6 +9,7 @@ Welcome to the demo application for WeR1, this is meant to give you a brief idea
 3. Set the following environmental variables
    - `ACR_TOKEN` this should be set to the personal access token from [ACRCloud](https://console.acrcloud.com/account?region=eu-west-1#/developer). The token requires just `read-metadata` permissions. The variable should be set without `bearer`.
    - `PORT` this is the port to run the server on. It is _optional_ and if omitted will default to 4000.
+   - `ACCESS_TOKEN_SECRET` this can be set to anything, it is just for the JWT token signing which is a demo in this.
 4. Run `npm run start` to compile and launch the server
 
 The _graphql-queries_ folder has examples of the queries which can be run.

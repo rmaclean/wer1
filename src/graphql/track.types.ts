@@ -1,5 +1,4 @@
 import {Field, ID, Int, InterfaceType, ObjectType} from 'type-graphql';
-import {v4 as uuidv4} from 'uuid';
 
 @InterfaceType()
 abstract class Base {
