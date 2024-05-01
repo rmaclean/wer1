@@ -1,7 +1,8 @@
+import 'reflect-metadata';
 import { getTrack } from './acrmetadata';
 import { Container } from '@freshgum/typedi';
 import { Track } from '../graphql/track.types';
-import { describe, beforeEach, expect, it } from "bun:test";
+import {describe, beforeEach, expect, it} from "bun:test";
 
 describe('getTrack', () => {
   beforeEach(() => {
