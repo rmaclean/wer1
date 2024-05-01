@@ -1,9 +1,9 @@
 import {Arg, Mutation, Resolver} from 'type-graphql';
-import {AuthenticationResponse} from './auth.types.js';
-import {Service} from 'typedi';
-import {AuthService} from './auth.service.js';
+import {AuthenticationResponse} from './auth.types';
+import {Service} from '@freshgum/typedi';
+import {AuthService} from './auth.service';
 
-@Service()
+@Service([AuthService])
 @Resolver()
 export class AuthResolver {
   constructor(private authService: AuthService) {}

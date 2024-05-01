@@ -5,18 +5,19 @@ Welcome to the demo application for WeR1, this is meant to give you a brief idea
 ## Running
 
 1. Node 20+
-2. Run `npm ci` to install dependencies
+2. Install [bun](https://bun.sh/) `npm install -g bun`
+3. Run `bun i` to install dependencies
 3. Set the following environmental variables
    - `ACR_TOKEN` this should be set to the personal access token from [ACRCloud](https://console.acrcloud.com/account?region=eu-west-1#/developer). The token requires just `read-metadata` permissions. The variable should be set without `bearer`.
    - `PORT` this is the port to run the server on. It is _optional_ and if omitted will default to 4000.
    - `ACCESS_TOKEN_SECRET` this can be set to anything, it is just for the JWT token signing which is a demo in this.
-4. Run `npm run start` to compile and launch the server
+4. Run `bun run start` to compile and launch the server
 
 The _graphql-queries_ folder has examples of the queries which can be run.
 
 ## Design Notes
 
-- To get this going quickly I used [gts](https://github.com/google/gts) to scaffold the system. I went with this because it gives me a npm based solution which I felt had the lowest barrier for entry. If I was doing this in a production system, I likely would have used [bun](https://bun.sh/) thanks to its native TypeScript support, templates and performance. Same is true for eslint, not my ideal config but just quicker to get running with it.
+- I decided to use bun as the runtime for this since it makes working with TypeScript much easier and it is so much faster than node. Also the errors are nicer.
 
 - The document provided said it could be dockerised, and I have not done that because it was optional and also because adding a _DOCKERFILE_ is not massively complex and the time to benefit trade-off for me, lands that I would rather produce a better full solution for you to understand my skills.
 

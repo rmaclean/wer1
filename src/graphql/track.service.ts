@@ -1,15 +1,13 @@
-import {Service} from 'typedi';
-import PouchDb from 'pouchdb';
-import find from 'pouchdb-find';
-import {FindAllArgs, FindOneArgs, UpdateTrack} from './track.arguments.js';
-import {getTrack} from '../services/acrmetadata.js';
-import {DeletedTrack, Track} from './track.types.js';
+import {Service} from '@freshgum/typedi';
+import {FindAllArgs, FindOneArgs, UpdateTrack} from './track.arguments';
+import {getTrack} from '../services/acrmetadata';
+import {DeletedTrack, Track} from './track.types';
 
-@Service()
+@Service(["DB"])
 export class TrackService {
-  private db!: PouchDB.Database<{}>;
+  private db!: PouchDB.Database<object>;
 
-  private constructor(db: PouchDB.Database<{}>) {
+  private constructor(db: PouchDB.Database<object>) {
     this.db = db;
   }
 
@@ -63,20 +61,7 @@ export class TrackService {
     return undefined;
   };
 
-  static createTrackService = async () => {
-    PouchDb.plugin(find);
-    const db = new PouchDb('wer1');
 
-    await db.createIndex({
-      index: {fields: ['name', 'artist_name']},
-    });
-
-    await db.createIndex({
-      index: {fields: ['id']},
-    });
-
-    return new TrackService(db);
-  };
 
   findAll = async (args: FindAllArgs) => {
     const {rows} = await this.db.allDocs({

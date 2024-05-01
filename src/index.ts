@@ -1,17 +1,19 @@
 import 'reflect-metadata';
 import {ApolloServer} from '@apollo/server';
 import {buildSchema} from 'type-graphql';
-import {TrackResolver} from './graphql/track.resolver.js';
-import {Container} from 'typedi';
-import {TrackService} from './graphql/track.service.js';
-import {Config} from './config.js';
-import {AuthResolver} from './graphql/auth.resolver.js';
-import {tokenAuthChecker} from './graphql/auth.checker.js';
+import {TrackResolver} from './graphql/track.resolver';
+import {Container} from '@freshgum/typedi';
+import { Config } from './config';
+import {AuthResolver} from './graphql/auth.resolver';
+import {tokenAuthChecker} from './graphql/auth.checker';
 import express from 'express';
 import {expressjwt} from 'express-jwt';
 import {expressMiddleware} from '@apollo/server/express4';
 import bodyParser from 'body-parser';
+import { Database } from './services/database';
 
+const database = await new Database().createDBInstance();
+Container.set({id: "DB", value: database});
 const config = Container.get(Config);
 
 if (!config.valid()) {
@@ -21,14 +23,13 @@ if (!config.valid()) {
   throw new Error('Invalid config');
 }
 
-// this is because it is a demo; would like to have a more seperate DB that has smarter spin up
-// for the demo, linking it into track service and having a special constructor is a fair
-// tradeoff.
-Container.set(TrackService, await TrackService.createTrackService());
-
 const schema = await buildSchema({
   resolvers: [TrackResolver, AuthResolver],
-  container: Container,
+  container: {
+    get: (type) => {
+      return Container.get(type)
+    }
+  },
   authChecker: tokenAuthChecker,
 });
 

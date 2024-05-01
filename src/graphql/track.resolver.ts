@@ -1,15 +1,15 @@
 import {Args, Authorized, Mutation, Query, Resolver} from 'type-graphql';
-import {DeletedTrack, Track} from './track.types.js';
+import {DeletedTrack, Track} from './track.types';
 import {
   FindAllArgs,
   FindOneArgs,
   GetOneArgs,
   UpdateTrack,
-} from './track.arguments.js';
-import {TrackService} from './track.service.js';
-import {Service} from 'typedi';
+} from './track.arguments';
+import {TrackService} from './track.service';
+import {Service} from '@freshgum/typedi';
 
-@Service()
+@Service([TrackService])
 @Resolver(Track)
 export class TrackResolver {
   constructor(private trackService: TrackService) {}

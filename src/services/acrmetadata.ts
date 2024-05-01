@@ -1,7 +1,7 @@
-import {Container} from 'typedi';
-import {Config} from '../config.js';
-import {ArcMetadata} from './arcmetadata.d.js';
-import {Track} from '../graphql/track.types.js';
+import {Container} from '@freshgum/typedi';
+import { Config } from '../config';
+import {ArcMetadata} from './arcmetadata.d';
+import {Track} from '../graphql/track.types';
 
 export const getTrack = async (
   name: string,

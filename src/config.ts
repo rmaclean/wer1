@@ -1,6 +1,7 @@
-import {Service} from 'typedi';
+import { Service } from '@freshgum/typedi';
 
-@Service()
+
+@Service([])
 export class Config {
   public port = +(process.env.PORT || '4000');
   public acrToken = process.env.ACR_TOKEN;
@@ -8,6 +9,6 @@ export class Config {
   public graphqlPath = process.env.GRAPHQL_PATH || '/graphql';
 
   valid = () => {
-    return this.port && this.acrToken && this.accessTokenSecret;
+    return this.port && this.acrToken && this.accessTokenSecret && this.graphqlPath;
   };
 }

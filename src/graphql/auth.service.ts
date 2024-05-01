@@ -1,8 +1,8 @@
-import {Service} from 'typedi';
+import {Service} from '@freshgum/typedi';
 import jwt from 'jsonwebtoken';
-import {Config} from '../config.js';
+import { Config } from '../config';
 
-@Service()
+@Service([Config])
 export class AuthService {
   constructor(private config: Config) {}
   createAccessToken = async (email: string) => {
@@ -19,7 +19,7 @@ export class AuthService {
     }
 
     try {
-      const result = jwt.verify(token, this.config.accessTokenSecret!, {
+      const _result = jwt.verify(token, this.config.accessTokenSecret!, {
         algorithms: ['HS256'],
       }) as any;
 
