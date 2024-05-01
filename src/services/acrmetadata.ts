@@ -1,7 +1,7 @@
-import {Container} from '@freshgum/typedi';
+import { Container } from '@freshgum/typedi';
 import { Config } from '../config';
-import {ArcMetadata} from './arcmetadata.d';
-import {Track} from '../graphql/track.types';
+import { Track } from '../graphql/track.types';
+import type { ArcMetadata } from './arcmetadata';
 
 export const getTrack = async (
   name: string,
@@ -18,7 +18,7 @@ export const getTrack = async (
   );
 
   if (result.ok) {
-    const {data} = (await result.json()) as ArcMetadata;
+    const { data } = (await result.json()) as ArcMetadata;
     if (data.length === 0) {
       throw new Error('No tracks found');
     }

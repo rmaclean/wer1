@@ -1,7 +1,7 @@
-import {Service} from '@freshgum/typedi';
-import {FindAllArgs, FindOneArgs, UpdateTrack} from './track.arguments';
-import {getTrack} from '../services/acrmetadata';
-import {DeletedTrack, Track} from './track.types';
+import { Service } from '@freshgum/typedi';
+import { FindAllArgs, FindOneArgs, UpdateTrack } from './track.arguments';
+import { getTrack } from '../services/acrmetadata';
+import { DeletedTrack, Track } from './track.types';
 
 @Service(["DB"])
 export class TrackService {
@@ -42,7 +42,7 @@ export class TrackService {
   };
 
   private getById = async (id: string) => {
-    const {docs} = await this.db.find({
+    const { docs } = await this.db.find({
       selector: {
         _id: id,
       },
@@ -64,7 +64,7 @@ export class TrackService {
 
 
   findAll = async (args: FindAllArgs) => {
-    const {rows} = await this.db.allDocs({
+    const { rows } = await this.db.allDocs({
       include_docs: true,
       skip: args.skip,
       limit: args.take,
@@ -74,7 +74,7 @@ export class TrackService {
   };
 
   findOne = async (args: FindOneArgs) => {
-    const {docs} = await this.db.find({
+    const { docs } = await this.db.find({
       selector: {
         name: args.name,
         artist_name: args.artist_name,

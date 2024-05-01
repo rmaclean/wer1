@@ -1,8 +1,8 @@
-import {Field, ID, Int, InterfaceType, ObjectType} from 'type-graphql';
+import { Field, ID, Int, InterfaceType, ObjectType } from 'type-graphql';
 
 @InterfaceType()
 abstract class Base {
-  @Field(type => ID, {name: 'id'})
+  @Field(type => ID, { name: 'id' })
   readonly _id!: string;
 
   @Field()
@@ -17,7 +17,7 @@ abstract class Base {
   }
 }
 
-@ObjectType({implements: Base})
+@ObjectType({ implements: Base })
 export class Track extends Base {
   @Field()
   name!: string;

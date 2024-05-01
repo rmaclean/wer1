@@ -1,12 +1,12 @@
-import {Service} from '@freshgum/typedi';
+import { Service } from '@freshgum/typedi';
 import jwt from 'jsonwebtoken';
 import { Config } from '../config';
 
 @Service([Config])
 export class AuthService {
-  constructor(private config: Config) {}
+  constructor(private config: Config) { }
   createAccessToken = async (email: string) => {
-    return jwt.sign({email}, this.config.accessTokenSecret!, {
+    return jwt.sign({ email }, this.config.accessTokenSecret!, {
       expiresIn: '1d',
       algorithm: 'HS256',
     });

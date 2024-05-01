@@ -1,19 +1,19 @@
 import 'reflect-metadata';
-import {ApolloServer} from '@apollo/server';
-import {buildSchema} from 'type-graphql';
-import {TrackResolver} from './graphql/track.resolver';
-import {Container} from '@freshgum/typedi';
+import { ApolloServer } from '@apollo/server';
+import { buildSchema } from 'type-graphql';
+import { TrackResolver } from './graphql/track.resolver';
+import { Container } from '@freshgum/typedi';
 import { Config } from './config';
-import {AuthResolver} from './graphql/auth.resolver';
-import {tokenAuthChecker} from './graphql/auth.checker';
+import { AuthResolver } from './graphql/auth.resolver';
+import { tokenAuthChecker } from './graphql/auth.checker';
 import express from 'express';
-import {expressjwt} from 'express-jwt';
-import {expressMiddleware} from '@apollo/server/express4';
+import { expressjwt } from 'express-jwt';
+import { expressMiddleware } from '@apollo/server/express4';
 import bodyParser from 'body-parser';
 import { Database } from './services/database';
 
 const database = await new Database().createDBInstance();
-Container.set({id: "DB", value: database});
+Container.set({ id: "DB", value: database });
 const config = Container.get(Config);
 
 if (!config.valid()) {
@@ -33,7 +33,7 @@ const schema = await buildSchema({
   authChecker: tokenAuthChecker,
 });
 
-const server = new ApolloServer({schema});
+const server = new ApolloServer({ schema });
 await server.start();
 
 const app = express();
@@ -51,11 +51,11 @@ app.use(
   config.graphqlPath,
   bodyParser.json(),
   expressMiddleware(server, {
-    context: async ({req}) => ({token: req.headers.authorization}),
+    context: async ({ req }) => ({ token: req.headers.authorization }),
   })
 );
 
-await new Promise<void>(resolve => app.listen({port: config.port}, resolve));
+await new Promise<void>(resolve => app.listen({ port: config.port }, resolve));
 
 console.log(
   `🎶 The server hums to life; letting its song playout at http://localhost:${config.port}${config.graphqlPath}`
