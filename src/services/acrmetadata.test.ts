@@ -1,15 +1,22 @@
-import 'reflect-metadata';
 import { getTrack } from './acrmetadata';
-import { Container } from '@freshgum/typedi';
 import { Track } from '../graphql/track.types';
-import {describe, beforeEach, expect, it} from "bun:test";
+import { describe, expect, it, mock } from "bun:test";
 
-describe('getTrack', () => {
-  beforeEach(() => {
-    Container.reset();
-  });
-
+describe('get track', () => {
   it('should return a Track object with the correct data', async () => {
+    global.fetch = mock().mockResolvedValueOnce({
+      ok: true,
+      json: mock().mockResolvedValueOnce({ data: [
+        {
+          artists: [{ name: 'Test Artist' }],
+          duration_ms: 240000,
+          name: 'Test Track',
+          isrc: 'ABCD12345678',
+          album: { release_date: '2023-04-01' }
+        }
+      ] }),
+    });
+
     const track = await getTrack('Test Track', 'Test Artist');
     expect(track).toBeInstanceOf(Track);
     expect(track.name).toBe('Test Track');
@@ -20,12 +27,22 @@ describe('getTrack', () => {
   });
 
   it('should throw an error if no tracks are found', async () => {
-    await expect(getTrack('Non-existent Track', 'Non-existent Artist')).rejects.toThrow(
+    global.fetch = mock().mockResolvedValueOnce({
+      ok: true,
+      json: mock().mockResolvedValueOnce({ data: [] }),
+    });
+
+    expect(getTrack('Non-existent Track', 'Non-existent Artist')).rejects.toThrow(
       'No tracks found'
     );
   });
 
   it('should throw an error if the API request fails', async () => {
-    await expect(getTrack('Test Track', 'Test Artist')).rejects.toThrow('API error');
+    global.fetch = mock().mockResolvedValueOnce({
+      ok: false,
+      text: mock().mockResolvedValueOnce("API error"),
+    });
+
+    expect(getTrack('Test Track', 'Test Artist')).rejects.toThrow('API error');
   });
 });

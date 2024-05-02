@@ -1,4 +1,4 @@
-import 'reflect-metadata';
+import './preload';
 import { ApolloServer } from '@apollo/server';
 import { buildSchema } from 'type-graphql';
 import { TrackResolver } from './graphql/track.resolver';

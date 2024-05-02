@@ -8,7 +8,7 @@ export class Config {
   public accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
   public graphqlPath = process.env.GRAPHQL_PATH || '/graphql';
 
-  valid = () => {
-    return this.port && this.acrToken && this.accessTokenSecret && this.graphqlPath;
+  valid = (): boolean => {
+    return !!(this.port && this.acrToken && this.accessTokenSecret && this.graphqlPath);
   };
 }

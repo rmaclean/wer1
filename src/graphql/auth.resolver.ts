@@ -9,13 +9,13 @@ export class AuthResolver {
   constructor(private authService: AuthService) { }
 
   @Mutation(returns => AuthenticationResponse)
-  login(
+  async login(
     @Arg('email', { nullable: false }) email: string,
     @Arg('password', { nullable: false }) password: string
   ) {
     if (email && password) {
       // todo: actually check the params; for demo, we assume all is great.
-      return { accessToken: this.authService.createAccessToken(email) };
+      return { accessToken: await this.authService.createAccessToken(email) };
     }
 
     throw new Error('Invalid credentials');

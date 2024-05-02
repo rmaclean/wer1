@@ -61,8 +61,6 @@ export class TrackService {
     return undefined;
   };
 
-
-
   findAll = async (args: FindAllArgs) => {
     const { rows } = await this.db.allDocs({
       include_docs: true,
