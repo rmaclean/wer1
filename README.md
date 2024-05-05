@@ -4,16 +4,26 @@ Welcome to the demo application for WeR1, this is meant to give you a brief idea
 
 ## Running
 
-1. Node 20+
+1. Node 22+
 2. Install [bun](https://bun.sh/) `npm install -g bun`
 3. Run `bun i` to install dependencies
 3. Set the following environmental variables
    - `ACR_TOKEN` this should be set to the personal access token from [ACRCloud](https://console.acrcloud.com/account?region=eu-west-1#/developer). The token requires just `read-metadata` permissions. The variable should be set without `bearer`.
    - `PORT` this is the port to run the server on. It is _optional_ and if omitted will default to 4000.
    - `ACCESS_TOKEN_SECRET` this can be set to anything, it is just for the JWT token signing which is a demo in this.
-4. Run `bun run start` to compile and launch the server
+4. Run `bun run start` to compile and launch the server and access it on http://localhost:4000/graphql (unless you changed the config)
 
 The _graphql-queries_ folder has examples of the queries which can be run.
+
+The following video can give guidance on how to use the system too
+
+<video width="320" height="240" controls>
+  <source src="./docs/demo.mov" type="video/mp4">
+</video>
+
+## Testing
+
+If you have everything setup, you can run `bun test`
 
 ## Design Notes
 
@@ -29,4 +39,11 @@ The _graphql-queries_ folder has examples of the queries which can be run.
 
 - What about exceptions and how should they be handled? At this point they are intentionally left as is, so that it is clear on the cause. This could be potentially exposing internal data (a known OWASP top 10), but without context on how this will be used, it is not clear the severity. If this is internal, then the severity is minimal and the benefit greater. If this is public facing, then the risk increases and they should be handled.
 
-- PouchDb search is case-sensitve
+- PouchDb search is case-sensitve, so I have put in a simple check for artist/title to prevent duplicates. In a final system design, I would look at either a better search or a normalised index to cater for this.
+
+- Not everything is covered by unit tests, some reasonings for places traded off not doing them for time. Time is a key factor as next week I am at [DevConf](https://www.devconf.co.za) and do not want to only get this back to you after that:
+   - auth.checker is just wrapping other code which is tested in the right signature; a test could ensure it does not deviate in future but for an assessment, not key to worry.
+   - Anything that is just types/classes/interfaces
+   - Core startup stuff like index; mostly cause testing the server start is what other tests like a E2E could do. I do think I would refactor that for a prod system to make setup more testable.
+   - Some of the database code. Find + in memory for pouchdb has odd issues with unit tests which I just do not have enough time to resolve. Rather give you 36 examples of validation now, than more in 2 weeks.
+

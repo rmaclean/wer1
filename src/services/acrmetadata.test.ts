@@ -1,8 +1,10 @@
-import { getTrack } from './acrmetadata';
+import { ACRMetadata } from './acrmetadata';
 import { Track } from '../graphql/track.types';
 import { describe, expect, it, mock } from "bun:test";
 
 describe('get track', () => {
+  const acrMetadata = new ACRMetadata();
+
   it('should return a Track object with the correct data', async () => {
     global.fetch = mock().mockResolvedValueOnce({
       ok: true,
@@ -17,7 +19,7 @@ describe('get track', () => {
       ] }),
     });
 
-    const track = await getTrack('Test Track', 'Test Artist');
+    const track = await acrMetadata.getTrack('Test Track', 'Test Artist');
     expect(track).toBeInstanceOf(Track);
     expect(track.name).toBe('Test Track');
     expect(track.artist_name).toBe('Test Artist');
@@ -32,7 +34,7 @@ describe('get track', () => {
       json: mock().mockResolvedValueOnce({ data: [] }),
     });
 
-    expect(getTrack('Non-existent Track', 'Non-existent Artist')).rejects.toThrow(
+    expect(acrMetadata.getTrack('Non-existent Track', 'Non-existent Artist')).rejects.toThrow(
       'No tracks found'
     );
   });
@@ -43,6 +45,6 @@ describe('get track', () => {
       text: mock().mockResolvedValueOnce("API error"),
     });
 
-    expect(getTrack('Test Track', 'Test Artist')).rejects.toThrow('API error');
+    expect(acrMetadata.getTrack('Test Track', 'Test Artist')).rejects.toThrow('API error');
   });
 });

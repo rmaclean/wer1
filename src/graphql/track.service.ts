@@ -1,14 +1,17 @@
 import { Service } from '@freshgum/typedi';
 import { FindAllArgs, FindOneArgs, UpdateTrack } from './track.arguments';
-import { getTrack } from '../services/acrmetadata';
+import { ACRMetadata } from '../services/acrmetadata';
 import { DeletedTrack, Track } from './track.types';
+import PouchDB from "pouchdb";
 
-@Service(["DB"])
+@Service(["DB", ACRMetadata])
 export class TrackService {
   private db!: PouchDB.Database<object>;
+  private acrMetadata: ACRMetadata;
 
-  private constructor(db: PouchDB.Database<object>) {
+  constructor(db: PouchDB.Database<object>, acrMetadata: ACRMetadata) {
     this.db = db;
+    this.acrMetadata = acrMetadata;
   }
 
   private nukeUndefinedProperties = (object: any) => {
@@ -17,7 +20,7 @@ export class TrackService {
     );
   };
 
-  update = async (track: UpdateTrack) => {
+  update = async (track: UpdateTrack): Promise<PouchDB.Core.ExistingDocument<object> | undefined> => {
     const docs = await this.getById(track._id);
     if (docs.length === 0) {
       return undefined;
@@ -31,7 +34,7 @@ export class TrackService {
     return existingTrack;
   };
 
-  delete = async (id: string) => {
+  delete = async (id: string): Promise<DeletedTrack | undefined> => {
     const docs = await this.getById(id);
     if (docs.length === 1) {
       await this.db.remove(docs[0]);
@@ -41,7 +44,7 @@ export class TrackService {
     return undefined;
   };
 
-  private getById = async (id: string) => {
+  private getById = async (id: string): Promise<PouchDB.Core.ExistingDocument<object>[]> => {
     const { docs } = await this.db.find({
       selector: {
         _id: id,
@@ -51,7 +54,7 @@ export class TrackService {
     return docs;
   };
 
-  get = async (id: string) => {
+  get = async (id: string): Promise<PouchDB.Core.ExistingDocument<object> | undefined> => {
     const docs = await this.getById(id);
 
     if (docs.length === 1) {
@@ -61,7 +64,7 @@ export class TrackService {
     return undefined;
   };
 
-  findAll = async (args: FindAllArgs) => {
+  findAll = async (args: FindAllArgs): Promise<(PouchDB.Core.ExistingDocument<object> | undefined)[]> => {
     const { rows } = await this.db.allDocs({
       include_docs: true,
       skip: args.skip,
@@ -71,7 +74,7 @@ export class TrackService {
     return rows.map(row => row.doc).filter(doc => !(doc as any)['language']);
   };
 
-  findOne = async (args: FindOneArgs) => {
+  findOne = async (args: FindOneArgs): Promise<Track | PouchDB.Core.ExistingDocument<object> | undefined> => {
     const { docs } = await this.db.find({
       selector: {
         name: args.name,
@@ -80,7 +83,7 @@ export class TrackService {
     });
 
     if (docs.length === 0) {
-      const track = await getTrack(args.name, args.artist_name);
+      const track = await this.acrMetadata.getTrack(args.name, args.artist_name);
       if (
         track &&
         track.artist_name.toLowerCase() === args.artist_name.toLowerCase() &&
